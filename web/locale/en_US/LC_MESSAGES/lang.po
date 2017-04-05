@@ -1,0 +1,259 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) antchain.org
+# FIRST AUTHOR <zhengq1@hotmail.com>, 2017.
+#
+
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2017-03-19 14:28+中国标准时间\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf8\n"
+"Content-Transfer-Encoding: utf8\n"
+"Generated-By: pygettext.py 1.5\n"
+
+# Index
+msgid "Antshares Blockchain Explorer"
+msgstr "Antshares Blockchain Explorer"
+
+msgid "Index"
+msgstr "Index"
+
+msgid "Block"
+msgstr "Block"
+
+msgid "Transaction"
+msgstr "Transaction"
+
+msgid "Address"
+msgstr "Address"
+
+msgid "Asset"
+msgstr "Asset"
+
+msgid "Rank"
+msgstr "Rank"
+
+msgid "More"
+msgstr "More"
+
+msgid "Search"
+msgstr "Search"
+
+msgid "height/address/hash/txid"
+msgstr "height/address/hash/txid"
+
+# Block
+msgid "Height"
+msgstr "Height"
+
+msgid "Time"
+msgstr "Time"
+
+msgid "Hash"
+msgstr "Hash"
+
+msgid "Previous Hash"
+msgstr "Previous Hash"
+
+msgid "Merkleroot"
+msgstr "Merkleroot"
+
+msgid "Miner"
+msgstr "Miner"
+
+msgid "Size"
+msgstr "Size"
+
+msgid "Version"
+msgstr "Version"
+
+msgid "Transaction Nums"
+msgstr "Transaction Nums"
+
+msgid "Block Information"
+msgstr "Block Information"
+
+msgid "Block Not Found!"
+msgstr "Block Not Found!"
+
+# Tx
+msgid "All Transaction"
+msgstr "All Transaction"
+
+msgid "Type"
+msgstr "Type"
+
+msgid "Txid"
+msgstr "Txid"
+
+msgid "TxSize"
+msgstr "TxSize"
+
+msgid "TxVersion"
+msgstr "TxVersion"
+
+msgid "In/Out"
+msgstr "In/Out"
+
+msgid "From Height"
+msgstr "From Height"
+
+msgid "Transaction Information"
+msgstr "Transaction Information"
+
+msgid "Transaction Not Found!"
+msgstr "Transaction Not Found!"
+
+msgid "ANC"
+msgstr "ANC"
+
+# Ads
+msgid "All Asset"
+msgstr "All Asset"
+
+msgid "Address"
+msgstr "Address"
+
+msgid "AdsAsset"
+msgstr "Asset"
+
+msgid "Value"
+msgstr "Value"
+
+msgid "Transaction Counts"
+msgstr "Transaction Counts"
+
+msgid "Last Transaction Time"
+msgstr "Last Transaction Time"
+
+msgid "First Transaction Time"
+msgstr "First Transaction Time"
+
+msgid "Address Information"
+msgstr "Address Information"
+
+# MinerTransaction
+msgid "MinerTransaction"
+msgstr "MinerTransaction"
+
+msgid "Fee"
+msgstr "Fee"
+
+msgid "System Fee"
+msgstr "System Fee"
+
+msgid "Network Fee"
+msgstr "Network Fee"
+
+# ContractTransaction
+msgid "ContractTransaction"
+msgstr "ContractTransaction"
+
+# ClaimTransaction
+msgid "ClaimTransaction"
+msgstr "ClaimTransaction"
+
+# RegisterTransaction
+msgid "RegisterTransaction"
+msgstr "RegisterTransaction"
+
+# IssueTransaction
+msgid "IssueTransaction"
+msgstr "IssueTransaction"
+
+# EnrollmentTransaction
+msgid "EnrollmentTransaction"
+msgstr "EnrollmentTransaction"
+
+# AgencyTransaction
+msgid "AgencyTransaction"
+msgstr "AgencyTransaction"
+
+# PublishTransaction
+msgid "PublishTransaction"
+msgstr "PublishTransaction"
+
+# Asset
+msgid "Asset Information"
+msgstr "Asset Information"
+
+msgid "Asset Name"
+msgstr "Asset Name"
+
+msgid "Asset ID"
+msgstr "Asset ID"
+
+msgid "Asset Type"
+msgstr "Type"
+
+msgid "Asset Issue"
+msgstr "Issue"
+
+msgid "Asset Amount"
+msgstr "Amount"
+
+msgid "No limit"
+msgstr "No limit"
+
+msgid "Asset Issuer"
+msgstr "Issuer"
+
+msgid "Asset Admin"
+msgstr "Admin"
+
+msgid "Asset Precision"
+msgstr "Precision"
+
+msgid "Asset Height"
+msgstr "Height"
+
+msgid "Asset Time"
+msgstr "Time"
+
+# Rank
+msgid "Rank"
+msgstr "Rank"
+
+# API
+msgid "API Interface"
+msgstr "API Interface"
+
+msgid "Interface Name"
+msgstr "Interface Name"
+
+msgid "Call Address"
+msgstr "Call Address"
+
+msgid "Parameter"
+msgstr "Parameter"
+
+msgid "Example"
+msgstr "Example"
+
+msgid "Explain"
+msgstr "Explain"
+
+msgid "None"
+msgstr "None"
+
+msgid "Get address value"
+msgstr "Get address value"
+
+msgid "Get current block height"
+msgstr "Get current block height"
+
+msgid "Get current block"
+msgstr "Get current block"
+
+msgid "Get block by height"
+msgstr "Get block by height"
+
+msgid "Get block by hash"
+msgstr "Get block by hash"
+
+msgid "Get transaction by txid"
+msgstr "Get transaction by txid"
