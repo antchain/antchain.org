@@ -1,0 +1,259 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) antchain.org
+# FIRST AUTHOR <zhengq1@hotmail.com>, 2017.
+#
+
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2017-03-19 14:28+中国标准时间\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf8\n"
+"Content-Transfer-Encoding: utf8\n"
+"Generated-By: pygettext.py 1.5\n"
+
+# Index
+msgid "Antshares Blockchain Explorer"
+msgstr "Antshares小蚁区块链浏览器"
+
+msgid "Index"
+msgstr "首页"
+
+msgid "Block"
+msgstr "区块"
+
+msgid "Transaction"
+msgstr "交易"
+
+msgid "Address"
+msgstr "地址"
+
+msgid "Asset"
+msgstr "资产"
+
+msgid "Rank"
+msgstr "排名"
+
+msgid "More"
+msgstr "更多"
+
+msgid "Search"
+msgstr "搜索"
+
+msgid "height/address/hash/txid"
+msgstr "区块高度 / 地址 / 区块或交易散列值"
+
+# Block
+msgid "Height"
+msgstr "高度"
+
+msgid "Time"
+msgstr "时间"
+
+msgid "Hash"
+msgstr "散列值"
+
+msgid "Previous Hash"
+msgstr "上一块散列值"
+
+msgid "Merkleroot"
+msgstr "默克尔树根植"
+
+msgid "Miner"
+msgstr "记账人"
+
+msgid "Size"
+msgstr "区块大小"
+
+msgid "Version"
+msgstr "区块版本"
+
+msgid "Transaction Nums"
+msgstr "交易数量"
+
+msgid "Block Information"
+msgstr "区块信息"
+
+msgid "Block Not Found!"
+msgstr "区块未找到！"
+
+# Tx
+msgid "All Transaction"
+msgstr "所有交易"
+
+msgid "Type"
+msgstr "类型"
+
+msgid "Txid"
+msgstr "交易ID"
+
+msgid "TxSize"
+msgstr "交易大小"
+
+msgid "TxVersion"
+msgstr "交易版本"
+
+msgid "In/Out"
+msgstr "输入/输出笔数"
+
+msgid "From Height"
+msgstr "所在区块"
+
+msgid "Transaction Information"
+msgstr "交易信息"
+
+msgid "Transaction Not Found!"
+msgstr "交易未找到！"
+
+msgid "ANC"
+msgstr "小蚁币"
+
+# Ads
+msgid "All Asset"
+msgstr "所有资产"
+
+msgid "Address"
+msgstr "地址"
+
+msgid "AdsAsset"
+msgstr "交易资产"
+
+msgid "Value"
+msgstr "资产价值"
+
+msgid "Transaction Counts"
+msgstr "交易次数"
+
+msgid "Last Transaction Time"
+msgstr "最新交易时间"
+
+msgid "First Transaction Time"
+msgstr "地址生成时间"
+
+msgid "Address Information"
+msgstr "地址信息"
+
+# MinerTransaction
+msgid "MinerTransaction"
+msgstr "挖矿交易"
+
+msgid "Fee"
+msgstr "手续费"
+
+msgid "System Fee"
+msgstr "系统手续费"
+
+msgid "Network Fee"
+msgstr "网络手续费"
+
+# ContractTransaction
+msgid "ContractTransaction"
+msgstr "合约交易"
+
+# ClaimTransaction
+msgid "ClaimTransaction"
+msgstr "提取小蚁币交易"
+
+# RegisterTransaction
+msgid "RegisterTransaction"
+msgstr "登记资产交易"
+
+# IssueTransaction
+msgid "IssueTransaction"
+msgstr "发行资产交易"
+
+# EnrollmentTransaction
+msgid "EnrollmentTransaction"
+msgstr "报名记账人交易"
+
+# AgencyTransaction
+msgid "AgencyTransaction"
+msgstr "委托交易"
+
+# PublishTransaction
+msgid "PublishTransaction"
+msgstr "发布智能合约交易"
+
+# Asset
+msgid "Asset Information"
+msgstr "资产信息"
+
+msgid "Asset Name"
+msgstr "资产名称"
+
+msgid "Asset ID"
+msgstr "散列值"
+
+msgid "Asset Type"
+msgstr "类型"
+
+msgid "Asset Issue"
+msgstr "发行量"
+
+msgid "Asset Amount"
+msgstr "总量"
+
+msgid "No limit"
+msgstr "无上限"
+
+msgid "Asset Issuer"
+msgstr "发行人"
+
+msgid "Asset Admin"
+msgstr "管理人"
+
+msgid "Asset Precision"
+msgstr "精度"
+
+msgid "Asset Height"
+msgstr "注册高度"
+
+msgid "Asset Time"
+msgstr "注册时间"
+
+# Rank
+msgid "Rank"
+msgstr "排名"
+
+# API
+msgid "API Interface"
+msgstr "API接口说明"
+
+msgid "Interface Name"
+msgstr "接口名称"
+
+msgid "Call Address"
+msgstr "调用地址"
+
+msgid "Parameter"
+msgstr "参数"
+
+msgid "Example"
+msgstr "示例"
+
+msgid "Explain"
+msgstr "说明"
+
+msgid "None"
+msgstr "无"
+
+msgid "Get address value"
+msgstr "获取地址余额接口"
+
+msgid "Get current block height"
+msgstr "获取当前块高接口"
+
+msgid "Get current block"
+msgstr "获取当前区块接口"
+
+msgid "Get block by height"
+msgstr "通过高度获取区块接口"
+
+msgid "Get block by hash"
+msgstr "通过散列值获取区块接口"
+
+msgid "Get transaction by txid"
+msgstr "通过交易ID获取交易接口"
