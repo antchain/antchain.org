@@ -72,7 +72,7 @@ def SaveAssetAddress(asset,address) :
 
     last_tx_time = GetTimeByBlockHeight(result['height'])
 
-    json_str = '{"asset":"%s", "address":"%s", "value":%s, "first_tx_time":%d, "last_tx_time":%d, "txid_list":[%s]}' %(asset,address,value,first_tx_time,last_tx_time,txid_str)
+    json_str = '{"asset":"%s", "address":"%s", "value":"%s", "first_tx_time":%d, "last_tx_time":%d, "txid_list":[%s]}' %(asset,address,value,first_tx_time,last_tx_time,txid_str)
     ads = json.loads(json_str)
     SaveAds(ads)
 
@@ -106,7 +106,7 @@ def SaveAddress(address) :
 
     last_tx_time = GetTimeByBlockHeight(result['height'])
 
-    json_str = '{"asset":"0", "address":"%s", "value":0, "first_tx_time":%d, "last_tx_time":%d, "txid_list":[%s]}' % (address, first_tx_time, last_tx_time, txid_str)
+    json_str = '{"asset":"0", "address":"%s", "value":"0", "first_tx_time":%d, "last_tx_time":%d, "txid_list":[%s]}' % (address, first_tx_time, last_tx_time, txid_str)
     ads = json.loads(json_str)
     SaveAds(ads)
 
