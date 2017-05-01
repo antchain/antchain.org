@@ -97,13 +97,9 @@ def SaveAddress(coin,time) :
 		for txid in result['txid_list'] :
 			txid_set.add(txid['txid'])
 
-		# Check if spent
-		n = GetPrecisionByAsset(coin['asset'])
-		if n > 0 :
-			strvalue = ('%.*f' % (n, result['value'])).rstrip('0')
-		else :
-			strvalue = str(result['value'])
+		strvalue = result['value']
 
+		# Check if spent
 		if int(coin['state']) & CoinState.Spent == CoinState.Spent:
 			value = Decimal(strvalue) - Decimal(coin['value'])
 			print "value = ", Decimal(strvalue), " - ", Decimal(coin['value']), " = ", str(value)
@@ -135,10 +131,10 @@ def SaveAddress(coin,time) :
 			raise Exception("[SaveAddress] value < 0")
 
 		last_tx_time = time
-		txid_array = json.loads(txid_str)
+		#txid_array = json.loads(txid_str)
 
 		# asset - address
-		json_str = '{"value":%s, "last_tx_time":%d, "txid_list":%s}' % (value, last_tx_time, txid_str)
+		json_str = '{"value":"%s", "last_tx_time":%d, "txid_list":%s}' % (value, last_tx_time, txid_str)
 		sets = json.loads(json_str)
 		result = collection_ads.update_one({"asset": coin['asset'], "address": coin['address']},{"$set":sets})
 
@@ -147,15 +143,48 @@ def SaveAddress(coin,time) :
 		else :
 			raise Exception("[ADS] Update Address error!")
 
-		# address
-		json_str = '{"last_tx_time":%d, "txid_list":%s}' % (last_tx_time, txid_str)
-		sets = json.loads(json_str)
-		result = collection_ads.update_one({"asset": "0", "address": coin['address']}, {"$set": sets})
+		# allasset - address
+		result_all = collection_ads.find_one({"asset": "0", "address": coin['address']})
+		if result_all:
+			# find one, 'txid' changes
+			txid_all_set = set()
+			txid_all_str = "["
 
-		if result.modified_count == 1:
-			print "[ADS] Update Address:", coin['address'], "Asset: 0"
-		else:
-			print "[ADS] Update Address:", coin['address'], "Asset: 0, No Changes."
+			for txid in result_all['txid_list']:
+				txid_all_set.add(txid['txid'])
+
+			# Check if spent
+			if int(coin['state']) & CoinState.Spent == CoinState.Spent:
+				if coin['spent_txid'] not in txid_all_set:
+					txid_all_set.add(coin['spent_txid'])
+					txid_all_str = txid_all_str + '{"txid":"' + coin['spent_txid'] + '","height":' + str(coin['height']) + '}'
+			else:
+				if coin['txid'] not in txid_all_set:
+					txid_all_set.add(coin['txid'])
+					txid_all_str = txid_all_str + '{"txid":"' + coin['txid'] + '","height":' + str(coin['height']) + '}'
+
+			# fill txid_list
+			for txid in result_all['txid_list']:
+				if len(txid_all_str) == 1:
+					txid_all_str = txid_all_str + '{"txid":"' + txid['txid'] + '","height":' + str(txid['height']) + '}'
+				else:
+					txid_all_str = txid_all_str + ',{"txid":"' + txid['txid'] + '","height":' + str(txid['height']) + '}'
+
+			txid_all_str = txid_all_str + "]"
+			last_tx_time = time
+
+			# address
+			json_str = '{"last_tx_time":%d, "txid_list":%s}' % (last_tx_time, txid_all_str)
+			sets = json.loads(json_str)
+			result = collection_ads.update_one({"asset": "0", "address": coin['address']}, {"$set": sets})
+
+			if result.modified_count == 1:
+				print "[ADS] Update Address:", coin['address'], "Asset: 0"
+			else:
+				print "[ADS] Update Address:", coin['address'], "Asset: 0, No Changes."
+
+		else :
+			raise Exception("[ADS] Asset 0 Address not found!")
 
 	else :
 		# not find, insert new one
@@ -170,14 +199,54 @@ def SaveAddress(coin,time) :
 		last_tx_time = time
 
 		# asset - address
-		json_str = '{"asset":"%s", "address":"%s", "value":%s, "first_tx_time":%d, "last_tx_time":%d, "txid_list":[{"txid":"%s","height":%d}]}' % (coin['asset'], coin['address'], value, first_tx_time, last_tx_time, coin['txid'], coin['height'])
+		json_str = '{"asset":"%s", "address":"%s", "value":"%s", "first_tx_time":%d, "last_tx_time":%d, "txid_list":[{"txid":"%s","height":%d}]}' % (coin['asset'], coin['address'], value, first_tx_time, last_tx_time, coin['txid'], coin['height'])
 		ads = json.loads(json_str)
 		SaveAds(ads)
 
-		# address
-		json_str = '{"asset":"0", "address":"%s", "value":0, "first_tx_time":%d, "last_tx_time":%d, "txid_list":[{"txid":"%s","height":%d}]}' % (coin['address'], first_tx_time, last_tx_time, coin['txid'], coin['height'])
-		ads = json.loads(json_str)
-		SaveAds(ads)
+		# allasset - address
+		result_all = collection_ads.find_one({"asset": "0", "address": coin['address']})
+		if result_all:
+			# find one, 'txid' changes
+			txid_all_set = set()
+			txid_all_str = "["
+
+			for txid in result_all['txid_list']:
+				txid_all_set.add(txid['txid'])
+
+			# Check if spent
+			if int(coin['state']) & CoinState.Spent == CoinState.Spent:
+				if coin['spent_txid'] not in txid_all_set:
+					txid_all_set.add(coin['spent_txid'])
+					txid_all_str = txid_all_str + '{"txid":"' + coin['spent_txid'] + '","height":' + str(coin['height']) + '}'
+			else:
+				if coin['txid'] not in txid_all_set:
+					txid_all_set.add(coin['txid'])
+					txid_all_str = txid_all_str + '{"txid":"' + coin['txid'] + '","height":' + str(coin['height']) + '}'
+
+			# fill txid_list
+			for txid in result_all['txid_list']:
+				if len(txid_all_str) == 1:
+					txid_all_str = txid_all_str + '{"txid":"' + txid['txid'] + '","height":' + str(txid['height']) + '}'
+				else:
+					txid_all_str = txid_all_str + ',{"txid":"' + txid['txid'] + '","height":' + str(txid['height']) + '}'
+
+			txid_all_str = txid_all_str + "]"
+			last_tx_time = time
+
+			# address
+			json_str = '{"last_tx_time":%d, "txid_list":%s}' % (last_tx_time, txid_all_str)
+			sets = json.loads(json_str)
+			result = collection_ads.update_one({"asset": "0", "address": coin['address']}, {"$set": sets})
+
+			if result.modified_count == 1:
+				print "[ADS] Update Address:", coin['address'], "Asset: 0"
+			else:
+				print "[ADS] Update Address:", coin['address'], "Asset: 0, No Changes."
+
+		else:
+			json_str = '{"asset":"0", "address":"%s", "value":"0", "first_tx_time":%d, "last_tx_time":%d, "txid_list":[{"txid":"%s","height":%d}]}' % (coin['address'], first_tx_time, last_tx_time, coin['txid'], coin['height'])
+			ads = json.loads(json_str)
+			SaveAds(ads)
 
 
 def GetBlockByHeight(height) :
@@ -431,6 +500,19 @@ while 1 :
 
 		txs = blockdata['tx']
 		blockdata['txnum'] = len(txs)
+		
+		blockdata['height'] = blockdata['index']
+		del blockdata['index']
+		
+		blockdata['nextminer'] = blockdata['nextconsensus']
+		del blockdata['nextconsensus']
+		
+		blockdata['script']['redeem'] = blockdata['script']['invocation']
+		del blockdata['script']['invocation']
+		
+		blockdata['script']['stack'] = blockdata['script']['verification']
+		del blockdata['script']['verification']
+		
 		del blockdata['tx']
 		del blockdata['confirmations']
 
