@@ -4,6 +4,7 @@ import pymongo
 import urllib2
 import json
 import time
+import msvcrt
 from decimal import Decimal
 from sys import argv
 
@@ -89,13 +90,14 @@ def GetPrecisionByAsset(assetid) :
 def SaveAddress(coin,time) :
 	value = Decimal("0")
 	txid_set = set()
-	txid_str = "["
+	txid_list = []
 
 	result = collection_ads.find_one({"asset": coin['asset'], "address": coin['address']})
 	if result :
 		# find one, 'value' 'txid' changes
 		for txid in result['txid_list'] :
 			txid_set.add(txid['txid'])
+			txid_list.append( {'txid':txid['txid'],'height':str(txid['height'])} )
 
 		strvalue = result['value']
 
@@ -106,23 +108,14 @@ def SaveAddress(coin,time) :
 
 			if coin['spent_txid'] not in txid_set:
 				txid_set.add(coin['spent_txid'])
-				txid_str = txid_str + '{"txid":"' + coin['spent_txid'] + '","height":' + str(coin['height']) + '}'
+				txid_list.append( {'txid':coin['spent_txid'],'height':str(coin['height'])} )
 		else:
 			value = Decimal(strvalue) + Decimal(coin['value'])
 			print "value = ", Decimal(strvalue), " + ", Decimal(coin['value']), " = ", str(value)
 
 			if coin['txid'] not in txid_set:
 				txid_set.add(coin['txid'])
-				txid_str = txid_str + '{"txid":"' + coin['txid'] + '","height":' + str(coin['height']) + '}'
-
-		# fill txid_list
-		for txid in result['txid_list']:
-			if len(txid_str) == 1 :
-				txid_str = txid_str + '{"txid":"' + txid['txid'] + '","height":' + str(txid['height']) + '}'
-			else :
-				txid_str = txid_str + ',{"txid":"' + txid['txid'] + '","height":' + str(txid['height']) + '}'
-
-		txid_str = txid_str + "]"
+				txid_list.append( {'txid':coin['txid'],'height':str(coin['height'])} )
 
 		if value.compare(Decimal("0")) == Decimal("0"):
 			value = Decimal("0")
@@ -134,9 +127,12 @@ def SaveAddress(coin,time) :
 		#txid_array = json.loads(txid_str)
 
 		# asset - address
-		json_str = '{"value":"%s", "last_tx_time":%d, "txid_list":%s}' % (value, last_tx_time, txid_str)
-		sets = json.loads(json_str)
-		result = collection_ads.update_one({"asset": coin['asset'], "address": coin['address']},{"$set":sets})
+		set_dict = {}
+		set_dict['value'] = str(value)
+		set_dict['last_tx_time'] = last_tx_time
+		set_dict['txid_list'] = txid_list
+
+		result = collection_ads.update_one({"asset": coin['asset'], "address": coin['address']},{"$set":set_dict})
 
 		if result.modified_count == 1 :
 			print "[ADS] Update Address:", coin['address'], "Asset:", coin['asset']
@@ -148,35 +144,30 @@ def SaveAddress(coin,time) :
 		if result_all:
 			# find one, 'txid' changes
 			txid_all_set = set()
-			txid_all_str = "["
+			txid_all_list = []
 
 			for txid in result_all['txid_list']:
 				txid_all_set.add(txid['txid'])
+				txid_all_list.append( {'txid':txid['txid'],'height':str(txid['height'])} )
 
 			# Check if spent
 			if int(coin['state']) & CoinState.Spent == CoinState.Spent:
 				if coin['spent_txid'] not in txid_all_set:
 					txid_all_set.add(coin['spent_txid'])
-					txid_all_str = txid_all_str + '{"txid":"' + coin['spent_txid'] + '","height":' + str(coin['height']) + '}'
+					txid_all_list.append( {'txid':coin['spent_txid'],'height':str(coin['height'])} )
 			else:
 				if coin['txid'] not in txid_all_set:
 					txid_all_set.add(coin['txid'])
-					txid_all_str = txid_all_str + '{"txid":"' + coin['txid'] + '","height":' + str(coin['height']) + '}'
+					txid_all_list.append( {'txid':coin['txid'],'height':str(coin['height'])} )
 
-			# fill txid_list
-			for txid in result_all['txid_list']:
-				if len(txid_all_str) == 1:
-					txid_all_str = txid_all_str + '{"txid":"' + txid['txid'] + '","height":' + str(txid['height']) + '}'
-				else:
-					txid_all_str = txid_all_str + ',{"txid":"' + txid['txid'] + '","height":' + str(txid['height']) + '}'
-
-			txid_all_str = txid_all_str + "]"
 			last_tx_time = time
 
 			# address
-			json_str = '{"last_tx_time":%d, "txid_list":%s}' % (last_tx_time, txid_all_str)
-			sets = json.loads(json_str)
-			result = collection_ads.update_one({"asset": "0", "address": coin['address']}, {"$set": sets})
+			set_all_dict = {}
+			set_all_dict['last_tx_time'] = last_tx_time
+			set_all_dict['txid_list'] = txid_all_list
+
+			result = collection_ads.update_one({"asset": "0", "address": coin['address']}, {"$set": set_all_dict})
 
 			if result.modified_count == 1:
 				print "[ADS] Update Address:", coin['address'], "Asset: 0"
@@ -208,35 +199,30 @@ def SaveAddress(coin,time) :
 		if result_all:
 			# find one, 'txid' changes
 			txid_all_set = set()
-			txid_all_str = "["
+			txid_all_list = []
 
 			for txid in result_all['txid_list']:
 				txid_all_set.add(txid['txid'])
+				txid_all_list.append( {'txid':txid['txid'],'height':str(txid['height'])} )
 
 			# Check if spent
 			if int(coin['state']) & CoinState.Spent == CoinState.Spent:
 				if coin['spent_txid'] not in txid_all_set:
 					txid_all_set.add(coin['spent_txid'])
-					txid_all_str = txid_all_str + '{"txid":"' + coin['spent_txid'] + '","height":' + str(coin['height']) + '}'
+					txid_all_list.append( {'txid':coin['spent_txid'],'height':str(coin['height'])} )
 			else:
 				if coin['txid'] not in txid_all_set:
 					txid_all_set.add(coin['txid'])
-					txid_all_str = txid_all_str + '{"txid":"' + coin['txid'] + '","height":' + str(coin['height']) + '}'
+					txid_all_list.append( {'txid':coin['txid'],'height':str(coin['height'])} )
 
-			# fill txid_list
-			for txid in result_all['txid_list']:
-				if len(txid_all_str) == 1:
-					txid_all_str = txid_all_str + '{"txid":"' + txid['txid'] + '","height":' + str(txid['height']) + '}'
-				else:
-					txid_all_str = txid_all_str + ',{"txid":"' + txid['txid'] + '","height":' + str(txid['height']) + '}'
-
-			txid_all_str = txid_all_str + "]"
 			last_tx_time = time
 
 			# address
-			json_str = '{"last_tx_time":%d, "txid_list":%s}' % (last_tx_time, txid_all_str)
-			sets = json.loads(json_str)
-			result = collection_ads.update_one({"asset": "0", "address": coin['address']}, {"$set": sets})
+			set_all_dict = {}
+			set_all_dict['last_tx_time'] = last_tx_time
+			set_all_dict['txid_list'] = txid_all_list
+
+			result = collection_ads.update_one({"asset": "0", "address": coin['address']}, {"$set": set_all_dict})
 
 			if result.modified_count == 1:
 				print "[ADS] Update Address:", coin['address'], "Asset: 0"
@@ -252,7 +238,7 @@ def SaveAddress(coin,time) :
 def GetBlockByHeight(height) :
 	data = {"jsonrpc":"2.0", "method":"getblock", "params":[height,1], "id":5}
 	headers = {'Content-Type': 'application/json'}
-	request = urllib2.Request(url=urls,headers=headers,data=json.dumps(data))
+	request = urllib2.Request(url=urls[urls_index],headers=headers,data=json.dumps(data))
 
 	try :
 		response = urllib2.urlopen(request)
@@ -435,7 +421,7 @@ def BuildIndex() :
 def GetCurrentHeight() :
 	data = {"jsonrpc": "2.0", "method": "getblockcount", "params": [0], "id": 5}
 	headers = {'Content-Type': 'application/json'}
-	request = urllib2.Request(url=urls, headers=headers, data=json.dumps(data))
+	request = urllib2.Request(url=urls[urls_index], headers=headers, data=json.dumps(data))
 
 	try:
 		response = urllib2.urlopen(request)
@@ -460,7 +446,15 @@ def RollbackToHeight(height) :
 #-----------------------------------------------
 # MAIN START
 #-----------------------------------------------
-urls = 'http://seed3.antshares.org:10332'
+urls_index = 0
+urls = [ 
+'http://seed1.antshares.org:10332',
+'http://seed2.antshares.org:10332',
+'http://seed3.antshares.org:10332',
+'http://seed4.antshares.org:10332',
+'http://seed5.antshares.org:10332',
+]
+
 client = pymongo.MongoClient("localhost", 27017)
 
 db = client.antchain_main
@@ -490,6 +484,12 @@ while 1 :
 	current_height = None
 	while ( current_height == None ) :
 		current_height = GetCurrentHeight()
+		if current_height == None :
+			time.sleep(1)
+			print urls[urls_index]," connect failed, change seed."
+			urls_index += 1
+			if urls_index == len(urls) :
+				urls_index = 0
 
 	# Continue if height equal
 	while ( height < current_height ) :
@@ -497,6 +497,12 @@ while 1 :
 		blockdata = None
 		while (blockdata == None):
 			blockdata = GetBlockByHeight(height)
+			if blockdata == None :
+				time.sleep(1)
+				print urls[urls_index]," connect failed, change seed."
+				urls_index += 1
+				if urls_index == len(urls) :
+					urls_index = 0
 
 		txs = blockdata['tx']
 		blockdata['txnum'] = len(txs)
@@ -521,6 +527,11 @@ while 1 :
 
 		height = height + 1
 		#break
+		
+		while msvcrt.kbhit():
+			q = msvcrt.getch()
+			if q in "q":
+				exit()
 
 	#break
 	time.sleep(15)

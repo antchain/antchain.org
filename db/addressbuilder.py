@@ -32,7 +32,7 @@ def SaveAssetAddress(asset,address) :
     i = 0
     value = Decimal("0")
     txid_set = set()
-    txid_str = ""
+    txid_list = []
 
     results = collection_coins.find({"asset":asset,"address":address}).sort("height",-1)
     for result in results :
@@ -47,20 +47,14 @@ def SaveAssetAddress(asset,address) :
 
             if result['spent_txid'] not in txid_set:
                 txid_set.add(result['spent_txid'])
-                if i == 0:
-                    txid_str = txid_str + '{"txid":"' + result['spent_txid'] + '","height":' + str(GetHeightByTxid(result['spent_txid'])) + '}'
-                else:
-                    txid_str = txid_str + ',{"txid":"' + result['spent_txid'] + '","height":' + str(GetHeightByTxid(result['spent_txid'])) + '}'
+                txid_list.append( {'txid':result['spent_txid'],'height':str(GetHeightByTxid(result['spent_txid']))} )
         else :
             value = Decimal(value) + Decimal(result['value'])
             print "value +", Decimal(result['value']), "value:", value
 
             if result['txid'] not in txid_set:
                 txid_set.add(result['txid'])
-                if i == 0:
-                    txid_str = txid_str + '{"txid":"' + result['txid'] + '","height":' + str(result['height']) + '}'
-                else:
-                    txid_str = txid_str + ',{"txid":"' + result['txid'] + '","height":' + str(result['height']) + '}'
+                txid_list.append( {'txid':result['txid'],'height':str(result['height'])} )
 
         i = i + 1
 
@@ -72,14 +66,21 @@ def SaveAssetAddress(asset,address) :
 
     last_tx_time = GetTimeByBlockHeight(result['height'])
 
-    json_str = '{"asset":"%s", "address":"%s", "value":"%s", "first_tx_time":%d, "last_tx_time":%d, "txid_list":[%s]}' %(asset,address,value,first_tx_time,last_tx_time,txid_str)
-    ads = json.loads(json_str)
-    SaveAds(ads)
+    ads_dict = {}
+    ads_dict['asset'] = asset
+    ads_dict['address'] = address
+    ads_dict['value'] = str(value)
+    ads_dict['first_tx_time'] = first_tx_time
+    ads_dict['last_tx_time'] = last_tx_time
+    ads_dict['txid_list'] = txid_list
+
+    SaveAds(ads_dict)
+
 
 def SaveAddress(address) :
     i = 0
     txid_set = set()
-    txid_str = ""
+    txid_list = []
 
     results = collection_coins.find({"address": address}).sort("height", -1)
     for result in results:
@@ -90,25 +91,25 @@ def SaveAddress(address) :
         if int(result['state']) & CoinState.Spent == CoinState.Spent:
             if result['spent_txid'] not in txid_set:
                 txid_set.add(result['spent_txid'])
-                if i == 0:
-                    txid_str = txid_str + '{"txid":"' + result['spent_txid'] + '","height":' + str(GetHeightByTxid(result['spent_txid'])) + '}'
-                else:
-                    txid_str = txid_str + ',{"txid":"' + result['spent_txid'] + '","height":' + str(GetHeightByTxid(result['spent_txid'])) + '}'
+                txid_list.append( {'txid':result['spent_txid'],'height':str(GetHeightByTxid(result['spent_txid']))} )
         else:
             if result['txid'] not in txid_set:
                 txid_set.add(result['txid'])
-                if i == 0:
-                    txid_str = txid_str + '{"txid":"' + result['txid'] + '","height":' + str(result['height']) + '}'
-                else:
-                    txid_str = txid_str + ',{"txid":"' + result['txid'] + '","height":' + str(result['height']) + '}'
+                txid_list.append( {'txid':result['txid'],'height':str(result['height'])} )
 
         i = i + 1
 
     last_tx_time = GetTimeByBlockHeight(result['height'])
 
-    json_str = '{"asset":"0", "address":"%s", "value":"0", "first_tx_time":%d, "last_tx_time":%d, "txid_list":[%s]}' % (address, first_tx_time, last_tx_time, txid_str)
-    ads = json.loads(json_str)
-    SaveAds(ads)
+    ads_dict = {}
+    ads_dict['asset'] = "0"
+    ads_dict['address'] = address
+    ads_dict['value'] = "0"
+    ads_dict['first_tx_time'] = first_tx_time
+    ads_dict['last_tx_time'] = last_tx_time
+    ads_dict['txid_list'] = txid_list
+
+    SaveAds(ads_dict)
 
 
 def RebuildAddress() :
