@@ -69,6 +69,23 @@ def GetApi() :
 
 	return html
 
+def GetJsonForBlock(block) :
+	data = {}
+	
+	data['height'] = block['height']
+	data['time'] = block['time']
+	data['hash'] = block['hash']
+	data['previousblockhash'] = block['previousblockhash']
+	data['merkleroot'] = block['merkleroot']
+	data['miner'] = block['nextminer']
+	data['size'] = block['size']
+	data['version'] = block['version']
+	data['txnum'] = block['txnum']
+	
+	json_str = json.dumps(data)
+	
+	return json_str
+
 def Api_V1_Address_Get_Value(address) :
 	data = {}
 	data['address'] = address
@@ -101,13 +118,25 @@ def Api_V1_Block_Get_Current_Height() :
 	return json_str
 
 def Api_V1_Block_Get_Current_Block() :
-	return ''
+	block = web.collection_blocks.find().sort("height",-1).limit(1)
+	
+	return GetJsonForBlock(block[0])
 
-def Api_V1_Block_Get_Block() :
-	return ''
+def Api_V1_Block_Get_Block_By_Height(height) :
+	block = web.collection_blocks.find_one({"height":height})
+	
+	if block :
+		return GetJsonForBlock(block)
+	else
+		return 'Block not found'
 
-def Api_V1_Block_Get_Block(height,hash) :
-	return ''
+def Api_V1_Block_Get_Block_By_Hash(hash) :
+	block = web.collection_blocks.find_one({"hash":hash})
+	
+	if block:
+		return GetJsonForBlock(block)
+	else
+		return 'Block not found'
 
 def Api_V1_Tx_Get_Tx(txid) :
 	return ''

@@ -462,11 +462,11 @@ def Api_V1_Block_Get_Current_Block() :
 
 @app.route('/api/v1/block/get_block/<int:height>')
 def Api_V1_Block_Get_Block_By_Height(height) :
-	return api.Api_V1_Block_Get_Block(height,None), {'content-type':'application/json'}
+	return api.Api_V1_Block_Get_Block_By_Height(height), {'content-type':'application/json'}
 
 @app.route('/api/v1/block/get_block/<regex("[a-zA-Z0-9]{64}"):hash>')
 def Api_V1_Block_Get_Block_By_Hash(hash) :
-	return api.Api_V1_Block_Get_Block(None,hash), {'content-type':'application/json'}
+	return api.Api_V1_Block_Get_Block_By_Hash(hash), {'content-type':'application/json'}
 
 @app.route('/api/v1/tx/get_tx/<regex("[a-zA-Z0-9]{64}"):txid>')
 def Api_V1_Tx_Get_Tx(txid) :
