@@ -72,15 +72,15 @@ def GetApi() :
 def GetJsonForBlock(block) :
 	data = {}
 	
-	data['height'] = block[0]['height']
-	data['time'] = block[0]['time']
-	data['hash'] = block[0]['hash']
-	data['previousblockhash'] = block[0]['previousblockhash']
-	data['merkleroot'] = block[0]['merkleroot']
-	data['miner'] = block[0]['nextminer']
-	data['size'] = block[0]['size']
-	data['version'] = block[0]['version']
-	data['txnum'] = block[0]['txnum']
+	data['height'] = block['height']
+	data['time'] = block['time']
+	data['hash'] = block['hash']
+	data['previousblockhash'] = block['previousblockhash']
+	data['merkleroot'] = block['merkleroot']
+	data['miner'] = block['nextminer']
+	data['size'] = block['size']
+	data['version'] = block['version']
+	data['txnum'] = block['txnum']
 	
 	json_str = json.dumps(data)
 	
@@ -120,7 +120,7 @@ def Api_V1_Block_Get_Current_Height() :
 def Api_V1_Block_Get_Current_Block() :
 	block = web.collection_blocks.find().sort("height",-1).limit(1)
 	
-	return GetJsonForBlock(block)
+	return GetJsonForBlock(block[0])
 
 def Api_V1_Block_Get_Block_By_Height(height) :
 	block = web.collection_blocks.find_one({"height":height})
